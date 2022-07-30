@@ -3,6 +3,11 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
+try:
+    from collections.abc import Mapping
+except ImportError:
+    from collections import Mapping
+
 database_name = "bookshelf"
 database_path = "postgresql://{}:{}@{}/{}".format(
     "student", "student", "localhost:5432", database_name
@@ -46,6 +51,8 @@ class Book(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
+        return True
+
 
     def update(self):
         db.session.commit()
@@ -53,6 +60,7 @@ class Book(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+        return True
 
     def format(self):
         return {
